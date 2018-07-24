@@ -1,0 +1,60 @@
+### WARNING ####
+## Do not do this unless you know what you are doing, there are better tools for this type of setup   ##
+## and decide the best ## strategy for your needs. This file shows what the /etc/my.cnf looks like on ##
+## each of the masters. Follow MySQL best practices on creating replication users. ##
+## Created by: J. Crutsinger ##
+
+MASTER 1: /etc/my.cnf
+
+[mysqld]
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+user=mysql
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+
+# Replication - Master/Master
+server-id               = 1
+log_bin                 = /var/lib/mysql/mysql-bin.log
+auto_increment_offset   = 1
+auto_increment_increment = 2
+binlog_do_db            = hive
+binlog_do_db            = iq
+binlog_do_db            = metrics
+binlog_do_db            = oozie
+binlog_do_db            = mysql
+binlog-format           = mixed
+# bind-address            = 127.0.0.1
+expire_logs_days        = 5
+
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+
+
+MASTER 2: /etc/my.cnf
+
+[mysqld]
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+user=mysql
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+
+# Master/Master Replication
+server-id              = 2
+auto_increment_offset   = 2
+auto_increment_increment = 2
+log_bin                = /var/lib/mysql/mysql-bin.log
+binlog_do_db           = hive
+binlog_do_db           = oozie
+binlog_do_db           = iq
+binlog_do_db           = metrics
+binlog_do_db           = mysql
+binlog-format          = mixed
+# bind-address            = 127.0.0.1
+expire_logs_days        = 5
+
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
