@@ -11,7 +11,7 @@ hostname=`/bin/hostname`
 
 if [[ "$check" -gt "$threshold" ]];  then
 echo "ALERT ON $hostname, SLAVE REPLICATION IS BEHIND MASTER BY $check. CONTACT DBA FOR RESOLUTION" | mail -s "$hostname SLAVE REPLICATION IS BEHIND MASTER" jcrutsinger@darthlinux.com
-fi
+fi;
 
 check2=`mysql -ureplica -e "show slave status\G;" | grep Slave_SQL_Running | head -1 | awk '{print $2}'`
 
@@ -27,3 +27,4 @@ if [[ "$check3" == "Yes" ]]; then
 exit 0;
 else
 echo "$hostname Slave IO is NOT RUNNING, CURRENT STATUS IS $check3 - CONTACT DBA FOR RESOLUTION" | mail -s "$hostname: SLAVE IO IS NOT RUNNING, CONTACT DBA FOR RESOLUTION" jcrutsinger@darthlinux.com
+fi;
